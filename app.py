@@ -1,3 +1,20 @@
+"""
+REST API for students and schools of university (KIU)
+=====================================================
+@Endpoints:
+    Getting all schools - "/schools"
+    Getting school by id - "/schools/<id>"
+    Adding school - "/schools/new"
+    Updating school - "/schools/update"
+    Deleting school - "/schools/delete"
+    Getting all students - "/students"
+    Getting students by school - "/students/school/<id>"
+    Getting student by id - "/students/<id>"
+    Adding student - "/students/new"
+    Updating student - "/students/update"
+    Deleting student - "/students/delete"
+"""
+
 import os
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
@@ -5,6 +22,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///uni.sqlite'
 db = SQLAlchemy(app)
+# First list for checking student parameters, second one for school
 param_arr = [["first_name", "last_name", "email", "phone", "gpa", "campus", "school"], ["title", "email", "phone"]]
 
 
@@ -33,6 +51,7 @@ class Student(db.Model):
         return f"(Student[{self.id}] {self.first_name} {self.last_name}, {self.school})"
 
 
+# If the database doesn't exist it gets created
 if not os.path.exists('/uni.sqlite'):
     db.create_all()
 
@@ -43,7 +62,7 @@ def get_students_all():
 
 
 @app.route('/students/school/<int:school_id>/', methods=['GET'])
-def get_students_by_school(school_id):  # put application's code here
+def get_students_by_school(school_id):
     return str(Student.query.filter_by(school=school_id).all())
 
 
@@ -65,6 +84,7 @@ def add_student(school_id):
     return f"Student added - {student}"
 
 
+# Checks if the json provided includes all valid data for adding a new student
 def check_student(jsoninput):
     params = param_arr[0]
     for j in jsoninput:
@@ -118,6 +138,7 @@ def delete_student():
     return f"Student deleted"
 
 
+# Checks if the json provided includes all valid data for adding a new school
 def check_school(jsoninput):
     params = param_arr[1]
     for j in jsoninput:
