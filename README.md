@@ -17,3 +17,7 @@ Adding student - "/students/new"
 Updating student - "/students/update"
 Deleting student - "/students/delete"
 ```
+
+Demo video:
+
+https://user-images.githubusercontent.com/71182016/169823085-9c64abe8-94d0-49be-8670-a7a3f4fbf3e1.mp4
